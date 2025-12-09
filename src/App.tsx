@@ -14,6 +14,13 @@ function extractIds(productUrl: string): { shopId: string; productId: string } |
   return { shopId: match[1], productId: match[2] };
 }
 
+function slugifyBrand(text: string): string {
+  let slug = text.toLowerCase();
+  slug = slug.replace(/&/g, ''); 
+  slug = slug.replace(/[^a-z0-9]/g, '');
+  return slug;
+}
+
 function App() {
 
   const { brands: BRANDS, products: PRODUCTS, loading } = useData();
@@ -53,7 +60,7 @@ function App() {
     const campaignSlug = `${slugify(selectedIG)}-${identifier}-${combinedSlug}-${slugify(selectedProduct)}`;
     
     // UTM Campaign: s{shop_id}_SS_ID__{slugify(brand)}-{campaign}
-    const utmCampaign = `s${shopId}_SS_ID__${slugify(selectedBrand)}-${campaignSlug}`;
+    const utmCampaign = `s${shopId}_SS_ID__${slugifyBrand(selectedBrand)}-${campaignSlug}`;
 
     return `https://shopee.co.id/universal-link/product/${shopId}/${productId}?smtt=9&utm_source=instagramads&utm_medium=seller&utm_campaign=${utmCampaign}&utm_content=&deep_and_web=1`;
   }, [selectedBrand, selectedIG, selectedProduct, videoName, date, BRANDS, PRODUCTS, identifier]);
